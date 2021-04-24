@@ -1,0 +1,15 @@
+﻿@page "/"
+
+<h1>PhoneBook</h1>
+
+<PersonList People="@people" />
+
+@code {
+    IList<Person> people = new List<Person>
+    {
+        new Person { EmpId=147, FirstName="Elon", LastName="Musk", PhoneNumber="111-111-1111"},
+        new Person { EmpId=789, FirstName="Eric", LastName="Weinstein", PhoneNumber="222-222-2222"},
+        new Person { EmpId=963, FirstName="Neil", LastName="deGrasse", PhoneNumber="333-333-3333"},
+        new Person { EmpId=321, FirstName="Steve", LastName="Jobs", PhoneNumber="444-444-4444"}
+    };
+}

@@ -1,0 +1,65 @@
+﻿@page "/ItemControlPanel"
+
+<div class="input-group input-group-lg" style="width:1060px;">
+    <div class="input-group-prepend">
+        <span class="input-group-text">Add a person</span>
+    </div>
+    <input type="text" class="form-control"
+           placeholder="Employee Id#"
+           @bind-value="EmpId" @bind-value:event="oninput" />
+    <input type="text" class="form-control"
+           placeholder="First Name"
+           @bind-value="FirstName" @bind-value:event="oninput" />
+    <input type="text" class="form-control"
+           placeholder="Last Name"
+           @bind-value="LastName" @bind-value:event="oninput" />
+    <input type="text" class="form-control"
+           placeholder="Phone#"
+           @bind-value="PhoneNumber" @bind-value:event="oninput" />
+    <div class="input-group-append">
+        <button class="btn btn-secondary @buttonDisabled" @onclick="NewPerson">
+            Add button
+        </button>
+    </div>
+</div>
+
+<hr style="width:1060px; margin-left: 0"/>
+
+<div class="input-group input-group-lg" style="width:1060px;">
+    <div class="input-group-prepend">
+        <span class="input-group-text">Edit a person</span>
+    </div>
+    <input type="text" class="form-control"
+           placeholder="Employee Id#"
+           @bind-value="EditEmpId" @bind-value:event="oninput" />
+    <input type="text" class="form-control"
+           placeholder="First Name"
+           @bind-value="EditFirstName" @bind-value:event="oninput" />
+    <input type="text" class="form-control"
+           placeholder="Last Name"
+           @bind-value="EditLastName" @bind-value:event="oninput" />
+    <input type="text" class="form-control"
+           placeholder="Phone#"
+           @bind-value="EditPhoneNumber" @bind-value:event="oninput" />
+    <div class="input-group-append">
+        <button class="btn btn-secondary" @onclick="EditPerson">
+            Edit button
+        </button>
+    </div>
+</div>
+
+<hr style="width:1060px; margin-left: 0" />
+
+<div class="input-group input-group-lg" style="width:1060px;">
+    <div class="input-group-prepend">
+        <span class="input-group-text">Delete a person</span>
+    </div>
+    <input type="text" class="form-control"
+           placeholder="Employee Id#"
+           @bind-value="DltEmpId" @bind-value:event="oninput" />
+    <div class="input-group-append">
+        <button class="btn btn-secondary" @onclick="DeletePerson">
+            Delete button
+        </button>
+    </div>
+</div>
