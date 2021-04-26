@@ -1,0 +1,100 @@
+﻿@page "/"
+@using DevExpress.Blazor
+@using System.Collections.ObjectModel
+
+<h2>DevExpress Data Grid</h2>
+
+<DxDataGrid Data="@phoneBooks"
+            InitNewRow="@OnInitNewRow"
+            RowInserting="@OnRowInserting"
+            RowUpdating="@OnRowUpdating"
+            RowRemoving="@OnRowDeleting"
+            ShowFilterRow="true"
+            ShowGroupPanel="true">
+    <DxDataGridCommandColumn></DxDataGridCommandColumn>
+    <DxDataGridDateEditColumn Field="@nameof(PhoneBook.Date)"
+                              DisplayFormat="D"
+                              EditorFormat="d" />
+    <DxDataGridSpinEditColumn Field="@nameof(PhoneBook.EmpId)"
+                              Caption="EmpId"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px"
+                              SortOrder="DataGridColumnSortOrder.Descending"
+                              SortIndex="0" />
+    <DxDataGridColumn Field="@nameof(PhoneBook.FullName)" />
+    <DxDataGridColumn Field="@nameof(PhoneBook.PhoneNumber)" />
+
+</DxDataGrid>
+
+@code {
+    public class PhoneBook
+    {
+        public DateTime Date { get; set; }
+        public int EmpId { get; set; }
+        public string FullName { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+    static readonly Random random = new Random();
+    readonly ObservableCollection<PhoneBook> phoneBooks = new ObservableCollection<PhoneBook>();
+
+    protected override void OnInitialized()
+    {
+        String[] FullName = { "Elon Must", "Sam Harris", "Yuval Harari", "Elon Musk" };
+        String[] PhoneNumber = { "111-111-1111", "222-222-2222", "333-333-3333", "444-444-4444" };
+
+        foreach (var date in Enumerable.Range(1, 30).Select(i => DateTime.Now.Date.AddDays(i)))
+        {
+            phoneBooks.Add(new PhoneBook()
+            {
+                Date = date,
+                EmpId = random.Next(1, 10),
+                FullName = FullName[random.Next(0, FullName.Length)],
+                PhoneNumber = PhoneNumber[random.Next(0, PhoneNumber.Length)]
+            });
+        }
+    }
+
+    void OnRowInserting(Dictionary<string, object> itemProperties)
+    {
+        phoneBooks.Add(UpdateItem(new PhoneBook(), itemProperties));
+    }
+    void OnRowDeleting(PhoneBook item)
+    {
+        phoneBooks.Remove(item);
+    }
+    void OnRowUpdating(PhoneBook item, Dictionary<string, object> itemProperties)
+    {
+        UpdateItem(item, itemProperties);
+    }
+
+    Task OnInitNewRow(Dictionary<string, object> values)
+    {
+        values.Add("Date", DateTime.Now);
+        values.Add("FullName", "David Lee");
+        values.Add("PhoneNumber", "714-123-4567");
+        return Task.CompletedTask;
+    }
+
+    static PhoneBook UpdateItem(PhoneBook item, Dictionary<string, object> itemProperties)
+    {
+        foreach (var field in itemProperties.Keys)
+        {
+            switch (field)
+            {
+                case "Date":
+                    item.Date = (DateTime)itemProperties[nameof(PhoneBook.Date)];
+                    break;
+                case "EmpId":
+                    item.EmpId = (int)itemProperties[nameof(PhoneBook.EmpId)];
+                    break;
+                case "FullName":
+                    item.FullName = (string)itemProperties[nameof(PhoneBook.FullName)];
+                    break;
+                case "PhoneNumber":
+                    item.PhoneNumber = (string)itemProperties[nameof(PhoneBook.PhoneNumber)];
+                    break;
+            }
+        }
+        return item;
+    }
+}
