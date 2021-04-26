@@ -53,7 +53,6 @@
 
     Task OnInitNewRow(Dictionary<string, object> values)
     {
-        values.Add("Date", DateTime.Now);
         values.Add("FullName", "");
         values.Add("PhoneNumber", "");
         return Task.CompletedTask;
