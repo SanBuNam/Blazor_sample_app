@@ -42,12 +42,12 @@
         String[] FullName = { "Elon Must", "Sam Harris", "Yuval Harari", "Elon Musk" };
         String[] PhoneNumber = { "111-111-1111", "222-222-2222", "333-333-3333", "444-444-4444" };
 
-        foreach (var date in Enumerable.Range(1, 30).Select(i => DateTime.Now.Date.AddDays(i)))
+        foreach (var date in Enumerable.Range(1, 4).Select(i => DateTime.Now.Date.AddDays(i)))
         {
             phoneBooks.Add(new PhoneBook()
             {
                 Date = date,
-                EmpId = random.Next(1, 10),
+                EmpId = random.Next(1, 1000),
                 FullName = FullName[random.Next(0, FullName.Length)],
                 PhoneNumber = PhoneNumber[random.Next(0, PhoneNumber.Length)]
             });
