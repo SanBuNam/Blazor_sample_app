@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @using DevExpress.Blazor
 @using System.Collections.ObjectModel
 
@@ -12,15 +12,6 @@
             ShowFilterRow="true"
             ShowGroupPanel="true">
     <DxDataGridCommandColumn></DxDataGridCommandColumn>
-    <DxDataGridDateEditColumn Field="@nameof(PhoneBook.Date)"
-                              DisplayFormat="D"
-                              EditorFormat="d" />
-    <DxDataGridSpinEditColumn Field="@nameof(PhoneBook.EmpId)"
-                              Caption="EmpId"
-                              TextAlignment="DataGridTextAlign.Left"
-                              Width="100px"
-                              SortOrder="DataGridColumnSortOrder.Descending"
-                              SortIndex="0" />
     <DxDataGridColumn Field="@nameof(PhoneBook.FullName)" />
     <DxDataGridColumn Field="@nameof(PhoneBook.PhoneNumber)" />
 
@@ -29,8 +20,6 @@
 @code {
     public class PhoneBook
     {
-        public DateTime Date { get; set; }
-        public int EmpId { get; set; }
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
     }
@@ -39,19 +28,14 @@
 
     protected override void OnInitialized()
     {
-        String[] FullName = { "Elon Must", "Sam Harris", "Yuval Harari", "Elon Musk" };
-        String[] PhoneNumber = { "111-111-1111", "222-222-2222", "333-333-3333", "444-444-4444" };
+        String[] FullName = { "David Lee"};
+        String[] PhoneNumber = { "111-111-1111"};
 
-        foreach (var date in Enumerable.Range(1, 4).Select(i => DateTime.Now.Date.AddDays(i)))
+        phoneBooks.Add(new PhoneBook()
         {
-            phoneBooks.Add(new PhoneBook()
-            {
-                Date = date,
-                EmpId = random.Next(1, 1000),
-                FullName = FullName[random.Next(0, FullName.Length)],
-                PhoneNumber = PhoneNumber[random.Next(0, PhoneNumber.Length)]
-            });
-        }
+            FullName = FullName[0],
+            PhoneNumber = PhoneNumber[0]
+        });
     }
 
     void OnRowInserting(Dictionary<string, object> itemProperties)
@@ -70,8 +54,8 @@
     Task OnInitNewRow(Dictionary<string, object> values)
     {
         values.Add("Date", DateTime.Now);
-        values.Add("FullName", "David Lee");
-        values.Add("PhoneNumber", "714-123-4567");
+        values.Add("FullName", "");
+        values.Add("PhoneNumber", "");
         return Task.CompletedTask;
     }
 
@@ -81,12 +65,6 @@
         {
             switch (field)
             {
-                case "Date":
-                    item.Date = (DateTime)itemProperties[nameof(PhoneBook.Date)];
-                    break;
-                case "EmpId":
-                    item.EmpId = (int)itemProperties[nameof(PhoneBook.EmpId)];
-                    break;
                 case "FullName":
                     item.FullName = (string)itemProperties[nameof(PhoneBook.FullName)];
                     break;
