@@ -1,0 +1,99 @@
+﻿@page "/datagrid"
+@inject HttpClient Http
+@using DevExpress.Blazor
+@using System.Collections.ObjectModel
+
+<h2>DevExpress Data Grid</h2>
+
+<DxDataGrid Data="@weatherForecasts"
+            InitNewRow="@OnInitNewRow"
+            RowInserting="@OnRowInserting"
+            RowUpdating="@OnRowUpdating"
+            RowRemoving="@OnRowDeleting"
+            ShowFilterRow="true"
+            ShowGroupPanel="true">
+    <DxDataGridCommandColumn></DxDataGridCommandColumn>
+    <DxDataGridDateEditColumn Field="@nameof(WeatherForecast.Date)"
+                              DisplayFormat="D"
+                              EditorFormat="d" />
+    <DxDataGridSpinEditColumn Field="@nameof(WeatherForecast.TemperatureC)"
+                              Caption="Temperature"
+                              TextAlignment="DataGridTextAlign.Left"
+                              Width="100px"
+                              SortOrder="DataGridColumnSortOrder.Descending"
+                              SortIndex="0" />
+    <DxDataGridColumn Field="@nameof(WeatherForecast.CloudCover)" />
+    <DxDataGridCheckBoxColumn Field="@nameof(WeatherForecast.Precipitation)"
+                              Width="100px"
+                              SortOrder="DataGridColumnSortOrder.Ascending"
+                              SortIndex="1" />
+</DxDataGrid>
+
+@code {
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+        public int TemperatureC { get; set; }
+        public bool Precipitation { get; set; }
+        public string CloudCover { get; set; }
+    }
+    static readonly Random random = new Random();
+    readonly ObservableCollection<WeatherForecast> weatherForecasts = new ObservableCollection<WeatherForecast>();
+
+    protected override void OnInitialized()
+    {
+        String[] CloudCover = { "Sunny", "Partly cloudy", "Cloudy", "Storm" };
+
+        foreach (var date in Enumerable.Range(1, 30).Select(i => DateTime.Now.Date.AddDays(i)))
+        {
+            weatherForecasts.Add(new WeatherForecast()
+            {
+                Date = date,
+                TemperatureC = random.Next(10, 20),
+                Precipitation = Convert.ToBoolean(random.Next(0, 2)),
+                CloudCover = CloudCover[random.Next(0, CloudCover.Length)]
+            });
+        }
+    }
+
+    void OnRowInserting(Dictionary<string, object> itemProperties)
+    {
+        weatherForecasts.Add(UpdateItem(new WeatherForecast(), itemProperties));
+    }
+    void OnRowDeleting(WeatherForecast item)
+    {
+        weatherForecasts.Remove(item);
+    }
+    void OnRowUpdating(WeatherForecast item, Dictionary<string, object> itemProperties)
+    {
+        UpdateItem(item, itemProperties);
+    }
+
+    Task OnInitNewRow(Dictionary<string, object> values)
+    {
+        values.Add("Date", DateTime.Now);
+        values.Add("TemperatureC", 13);
+        values.Add("CloudCover", "Sunny");
+        return Task.CompletedTask;
+    }
+
+    static WeatherForecast UpdateItem(WeatherForecast item, Dictionary<string, object> itemProperties)
+    {
+        foreach (var field in itemProperties.Keys)
+        {
+            switch (field)
+            {
+                case "Date":
+                    item.Date = (DateTime)itemProperties[nameof(WeatherForecast.Date)];
+                    break;
+                case "TemperatureC":
+                    item.TemperatureC = (int)itemProperties[nameof(WeatherForecast.TemperatureC)];
+                    break;
+                case "Precipitation":
+                    item.Precipitation = (bool)itemProperties[nameof(WeatherForecast.Precipitation)];
+                    break;
+            }
+        }
+        return item;
+    }
+}
